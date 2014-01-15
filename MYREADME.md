@@ -1,0 +1,35 @@
+# All dependencies #
+
+Successfully installed:
+* doit
+* pygments
+* pillow
+* docutils
+* mako
+* unidecode
+* lxml
+* yapsy
+* PyRSS2Gen
+* pytz
+* logbook
+* blinker
+* mock
+* requests
+* markdown
+* Jinja2
+* bbcode
+* pyphen
+* python-dateutil
+* micawber
+* pygal
+* typogrify
+* phpserialize
+* webassets
+* ipython
+* tornado
+* docopt
+* livereload
+* six
+* macfsevents
+* MarkupSafe
+* smartypants
