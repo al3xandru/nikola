@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright © 2012-2013 Roberto Alsina and others.
+# Copyright © 2012-2014 Roberto Alsina and others.
 
 # Permission is hereby granted, free of charge, to any
 # person obtaining a copy of this software and associated
@@ -50,6 +50,8 @@ import logbook
 from logbook.more import ExceptionHandler
 import pytz
 
+from . import DEBUG
+
 
 class ApplicationWarning(Exception):
     pass
@@ -67,13 +69,13 @@ def get_logger(name, handlers):
 
 
 STDERR_HANDLER = [logbook.StderrHandler(
-    level=logbook.NOTICE if not os.getenv('NIKOLA_DEBUG') else logbook.DEBUG,
+    level=logbook.NOTICE if not DEBUG else logbook.DEBUG,
     format_string=u'[{record.time:%Y-%m-%dT%H:%M:%SZ}] {record.level_name}: {record.channel}: {record.message}'
 )]
 LOGGER = get_logger('Nikola', STDERR_HANDLER)
 STRICT_HANDLER = ExceptionHandler(ApplicationWarning, level='WARNING')
 
-if os.getenv('NIKOLA_DEBUG'):
+if DEBUG:
     logging.basicConfig(level=logging.DEBUG)
 else:
     logging.basicConfig(level=logging.WARNING)
@@ -101,7 +103,8 @@ def req_missing(names, purpose, python=True, optional=False):
         LOGGER.warn(msg)
     else:
         LOGGER.error(msg)
-        raise Exception('Missing dependencies: {0}'.format(', '.join(names)))
+        LOGGER.error('Exiting due to missing dependencies.')
+        sys.exit(5)
 
     return msg
 
@@ -346,7 +349,7 @@ def generic_rss_renderer(lang, title, link, description, timeline, output_path,
         description=description,
         lastBuildDate=datetime.datetime.now(),
         items=items,
-        generator='nikola',
+        generator='Nikola <http://getnikola.com/>',
         language=lang
     )
     rss_obj.self_url = feed_url
