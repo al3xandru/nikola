@@ -1,8 +1,31 @@
+New in 7.0.0
+============
+
+Features
+--------
+
+* New --browser/-b option on the serve command to open instantly in a web browser (Issue #997)
+
+Bugfixes
+--------
+
+* Remove conflicting CSS code from rst.css (Issue #913)
+* Fix image URLs in galleries (Issue #986)
+* Fix link:// in RSS contents (Issue #952)
+* HIDE_SOURCELINK was set to True sometimes (Issue #1004)
+
 New in 6.3.0
 ============
 
 Features
 --------
+
+* Added translations:
+
+  - Basque by aitorp
+  - Czech by Ondřej Grover
+  - Estonian by Lauri Võsandi
+  - Norwegian Bokmål by Daniel Aleksandersen
 
 * TIMEZONE now defaults to UTC (via Issue #893)
 * Added a DEMOTE_HEADERS option (on by default; previously implemented by
@@ -21,6 +44,12 @@ Features
 * New "type" metadata to make differences for posts (Issue #927)
 * New Post.is_post attribute to differentiate posts and pages without bias
   (Post.use_in_feeds is False if the post is retired/unpublished/a draft)
+* Add rel=canonical <link> elements (Issue #449)
+* Add rel=alternate <link> elements to translations of the current page (Issues #988, #989)
+* Added a INDEXES_PAGES_MAIN setting to show the page number on the index page
+  if desired (True) (Issues #210, #987)
+* Added a TRANSLATIONS_PATTERN setting to specify the format for
+  language-dependent filenames (Issue #990)
 
 Bugfixes
 --------
@@ -38,12 +67,13 @@ Bugfixes
 * Added a warning/error when lessc/sass are missing (via Issue themes#24)
 * Fixed sass/less under Windows (Issue #939, themes#24)
 * Fix URL rewriting of fragment-only links (Issue #945)
-* Fixed the deploy rsync example (rsync --delete doesn't work with '/*' as
+* Fixed the deploy rsync example (rsync --delete doesn't work with '/\*' as
   source) (Issue #959)
 * Added a notice for the user if webassets is not installed and
   USE_BUNDLES is True (Issue #965)
 * Support livereload 2.0 (Issue #968)
 * Remove some unnecessary elements (Issues #969, #970)
+* abs_link should return absolute URI
 
 New in 6.2.1
 ============

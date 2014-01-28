@@ -4,11 +4,7 @@
 # 
 # Translators:
 # Translators:
-# Kwpolska <kwpolska@gmail.com>, 2013
-# Kwpolska <kwpolska@gmail.com>, 2013
-# Kwpolska <kwpolska@gmail.com>, 2013
-# ralsina <ralsina@netmanagers.com.ar>, 2013
-# ralsina <ralsina@netmanagers.com.ar>, 2013
+# Daniel <i18n@daniel.priv.no>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Nikola\n"
@@ -16,74 +12,74 @@ msgstr ""
 "POT-Creation-Date: 2013-03-15 12:24-0300\n"
 "PO-Revision-Date: 2014-01-22 13:13+0000\n"
 "Last-Translator: Kwpolska <kwpolska@gmail.com>\n"
-"Language-Team: Polish (http://www.transifex.com/projects/p/nikola/language/pl/)\n"
+"Language-Team: Norwegian Bokmål (http://www.transifex.com/projects/p/nikola/language/nb/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: pl\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Language: nb\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "More posts about %s"
-msgstr "Więcej postów o %s"
+msgstr "Flere innlegg om %s"
 
 msgid "LANGUAGE"
-msgstr "polski"
+msgstr "norsk"
 
 msgid "Tags"
-msgstr "Tags"
+msgstr "Merker"
 
 msgid "Categories"
-msgstr "Kategorie"
+msgstr "Kategorier"
 
 msgid "Tags and Categories"
-msgstr "Tagi i Kategorie"
+msgstr "Merker og kategorier"
 
 msgid "Read more"
-msgstr "Czytaj więcej"
+msgstr "Les mer"
 
 msgid "Posts about %s"
-msgstr "Posty o %s"
+msgstr "Innlegg om %s"
 
 msgid "Next post"
-msgstr "Następny post"
+msgstr "Neste innlegg"
 
 msgid "old posts, page %d"
-msgstr "stare posty, strona %d"
+msgstr "eldre innlegg, side %d"
 
 msgid "page %d"
-msgstr "strona %d"
+msgstr "side %d"
 
 msgid "Source"
-msgstr "Źródło"
+msgstr "Kilde"
 
 #. Here your translation should not say English but the name of your language
 #. instead
 msgid "Read in English"
-msgstr "Czytaj po polsku"
+msgstr "Les på norsk"
 
 msgid "Posts for year %s"
-msgstr "Posty z roku %s"
+msgstr "Innlegg fra %s"
 
 msgid "Newer posts"
-msgstr "Nowsze posty"
+msgstr "Nyere innlegg"
 
 msgid "Previous post"
-msgstr "Poprzedni post"
+msgstr "Forrige innlegg"
 
 msgid "Also available in:"
-msgstr "Również dostępny w językach:"
+msgstr "Også tilgjengelig på:"
 
 msgid "Original site"
-msgstr "Oryginalna strona"
+msgstr "Opprinnelig side"
 
 msgid "Older posts"
-msgstr "Starsze posty"
+msgstr "Eldre innlegg"
 
 msgid "Archive"
-msgstr "Archiwum"
+msgstr "Arkiv"
 
 msgid "Posted:"
-msgstr "Opublikowano:"
+msgstr "Publisert:"
 
 msgid "Posts for {month} {year}"
-msgstr "Posty z {month} {year}"
+msgstr "Innlegg fra {month} {year}"
