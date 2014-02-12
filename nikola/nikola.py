@@ -207,6 +207,7 @@ class Nikola(object):
             'SITEMAP_INCLUDE_FILELESS_DIRS': True,
             'TAG_PATH': 'categories',
             'TAG_PAGES_ARE_INDEXES': False,
+            'TEMPLATE_FILTERS': {},
             'THEME': 'bootstrap',
             'THEME_REVEAL_CONFIG_SUBTHEME': 'sky',
             'THEME_REVEAL_CONFIG_TRANSITION': 'cube',
@@ -414,6 +415,13 @@ class Nikola(object):
             self.plugin_manager.activatePluginByName(plugin_info.name)
             plugin_info.plugin_object.set_site(self)
 
+        # Also add aliases for combinations with TRANSLATIONS_PATTERN
+        self.config['COMPILERS'] = dict([(lang, list(exts) + [
+            utils.get_translation_candidate(self.config, "f" + ext, lang)[1:]
+            for ext in exts
+            for lang in self.config['TRANSLATIONS'].keys()])
+            for lang, exts in list(self.config['COMPILERS'].items())])
+
         # Activate all required compiler plugins
         for plugin_info in self.plugin_manager.getPluginsOfCategory("PageCompiler"):
             if plugin_info.name in self.config["COMPILERS"].keys():
@@ -566,6 +574,7 @@ class Nikola(object):
                                            for name in self.THEMES]
             self._template_system.set_directories(lookup_dirs,
                                                   self.config['CACHE_FOLDER'])
+            self._template_system.set_site(self)
         return self._template_system
 
     template_system = property(_get_template_system)
@@ -582,9 +591,9 @@ class Nikola(object):
             compile_html = self.inverse_compilers[ext]
         except KeyError:
             # Find the correct compiler for this files extension
-            langs = [lang for lang, exts in
-                     list(self.config['COMPILERS'].items())
-                     if ext in exts]
+            lang_exts_tab = list(self.config['COMPILERS'].items())
+            langs = [lang for lang, exts in lang_exts_tab if ext in exts or
+                     len([ext_ for ext_ in exts if source_name.endswith(ext_)]) > 0]
             if len(langs) != 1:
                 if len(set(langs)) > 1:
                     exit("Your file extension->compiler definition is"
@@ -657,6 +666,9 @@ class Nikola(object):
                 dst = self.link(dst_url.netloc, dst_url.path.lstrip('/'), lang)
             else:
                 return dst
+        elif dst_url.scheme == 'link':  # Magic absolute path link:
+            dst = dst_url.path
+            return dst
 
         # Refuse to replace links that consist of a fragment only
         if ((not dst_url.scheme) and (not dst_url.netloc) and
@@ -804,6 +816,7 @@ class Nikola(object):
             lang = utils.LocaleBorg().current_lang
 
         path = self.path_handlers[kind](name, lang)
+        path = [os.path.normpath(p) for p in path if p != '.']  # Fix Issue #1028
 
         if is_link:
             link = '/' + ('/'.join(path))
@@ -925,7 +938,8 @@ class Nikola(object):
             return
         seen = set([])
         print("Scanning posts", end='', file=sys.stderr)
-        lower_case_tags = set([])
+        slugged_tags = set([])
+        quit = False
         for wildcard, destination, template_name, use_in_feeds in \
                 self.config['post_pages']:
             print(".", end='', file=sys.stderr)
@@ -941,11 +955,16 @@ class Nikola(object):
                     translated_list = glob.glob(lang_glob)
                     # dir_glob could have put it already in full_list
                     full_list = list(set(full_list + translated_list))
-                    # Eliminate translations from full_list (even from dir_glob)
-                    for fname in full_list:
+
+                # Eliminate translations from full_list if they are not the primary,
+                # or a secondary with no primary
+                limited_list = full_list[:]
+                for fname in full_list:
+                    for lang in self.config['TRANSLATIONS'].keys():
                         translation = utils.get_translation_candidate(self.config, fname, lang)
                         if translation in full_list:
-                            full_list.remove(translation)
+                            limited_list.remove(translation)
+                full_list = limited_list
 
                 # We eliminate from the list the files inside any .ipynb folder
                 full_list = [p for p in full_list
@@ -974,16 +993,16 @@ class Nikola(object):
                         self.posts_per_month[
                             '{0}/{1:02d}'.format(post.date.year, post.date.month)].append(post.source_path)
                         for tag in post.alltags:
-                            if tag.lower() in lower_case_tags:
+                            if utils.slugify(tag) in slugged_tags:
                                 if tag not in self.posts_per_tag:
                                     # Tags that differ only in case
                                     other_tag = [k for k in self.posts_per_tag.keys() if k.lower() == tag.lower()][0]
-                                    utils.LOGGER.error('You have cases that differ only in upper/lower case: {0} and {1}'.format(tag, other_tag))
+                                    utils.LOGGER.error('You have tags that are too similar: {0} and {1}'.format(tag, other_tag))
                                     utils.LOGGER.error('Tag {0} is used in: {1}'.format(tag, post.source_path))
                                     utils.LOGGER.error('Tag {0} is used in: {1}'.format(other_tag, ', '.join(self.posts_per_tag[other_tag])))
-                                    sys.exit(1)
+                                    quit = True
                             else:
-                                lower_case_tags.add(tag.lower())
+                                slugged_tags.add(utils.slugify(tag))
                             self.posts_per_tag[tag].append(post.source_path)
                         self.posts_per_category[post.meta('category')].append(post.source_path)
                     else:
@@ -1002,6 +1021,8 @@ class Nikola(object):
             p.prev_post = post_timeline[i + 1]
         self._scanned = True
         print("done!", file=sys.stderr)
+        if quit:
+            sys.exit(1)
 
     def generic_page_renderer(self, lang, post, filters):
         """Render post fragments to final HTML pages."""

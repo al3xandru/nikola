@@ -878,11 +878,23 @@ There are lots of things you can do to personalize your website, but let's see
 the easy ones!
 
 CSS tweaking
-    The default configuration includes a file, ``themes/default/assets/css/custom.css``
-    which is empty. Put your CSS there, for minimal disruption of the provided CSS files.
+    Using the default configuration, you can create a ``assets/css/custom.css``
+    file and then it will be loaded from the ``<head>`` blocks of your site
+    pages.  Create it and put your CSS code there, for minimal disruption of the
+    provided CSS files.
 
     If you feel tempted to touch other files in assets, you probably will be better off
     with a `custom theme <theming.html>`__.
+
+    If you want to use LESS_ or Sass_ for your custom CSS, or the theme you use
+    contains LESS or Sass code that you want to override, create a ``less`` or
+    ``sass`` directory in your site root, put your ``.less`` or ``.scss`` files
+    there and a targets file containing the files you want compiled. Any
+    ``.less`` or ``.scss`` files from the theme chain that you want to use will
+    need to be included in your files.
+
+.. _LESS: http://lesscss.org/
+.. _Sass: http://sass-lang.com/
 
 Template tweaking
     If you really want to change the pages radically, you will want to do a
@@ -890,14 +902,14 @@ Template tweaking
 
 
 Navigation Links
-    The 'NAVIGATION_LINKS' option lets you define what links go in a sidebar or menu
+    The ``NAVIGATION_LINKS`` option lets you define what links go in a sidebar or menu
     (depending on your theme) so you can link to important pages, or to other sites.
 
     The format is a language-indexed dictionary, where each element is a tuple of
     tuples which are one of:
 
     1. A (url, text) tuple, describing a link
-    2. A ((url, text), (url, text), (url, text), title) tuple, describing a submenu / sublist.
+    2. A (((url, text), (url, text), (url, text)), title) tuple, describing a submenu / sublist.
 
     Example::
 
@@ -1156,7 +1168,7 @@ You can apply post processing to the files in your site, in order to optimize th
 or change them in arbitrary ways. For example, you may want to compress all CSS
 and JS files using yui-compressor.
 
-To do that, you can use the provided helper adding this in your ``config.py``::
+To do that, you can use the provided helper adding this in your ``conf.py``::
 
   from nikola import filters
 
